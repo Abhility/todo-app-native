@@ -8,12 +8,13 @@ import {
   Image,
   Text,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import TodoList from './TodoList';
 import httpRequest from '../helpers/httpClient';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function TodoApp() {
+const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [item, setItem] = useState('');
   const [loading, setLoading] = useState(false);
@@ -63,6 +64,7 @@ export default function TodoApp() {
     try {
       await httpRequest(API_URL, 'POST', todo);
       await getData(false);
+      ToastAndroid.show('Item added!', 1000);
     } catch (err) {
       setLoading(false);
       console.log(err);
@@ -113,29 +115,9 @@ export default function TodoApp() {
 
   return (
     <>
-      <View
-        style={{
-          alignItems: 'center',
-          flexDirection: 'column',
-          justifyContent: 'space-evenly',
-          width: '90%',
-          marginTop: 30,
-          marginBottom: 30,
-          marginLeft: '5%',
-          marginRight: '5%',
-        }}>
+      <View style={styles.container}>
         <TextInput
-          style={{
-            height: 40,
-            borderColor: 'teal',
-            borderBottomWidth: 2,
-            fontSize: 20,
-            width: '100%',
-            height: 50,
-            marginBottom: 30,
-            marginLeft: 20,
-            marginRight: 20,
-          }}
+          style={styles.itemInput}
           onChangeText={handleChange}
           value={item}
           placeholder="Add your todo here..."
@@ -169,4 +151,30 @@ export default function TodoApp() {
       )}
     </>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    width: '90%',
+    marginTop: 30,
+    marginBottom: 30,
+    marginLeft: '5%',
+    marginRight: '5%',
+  },
+  itemInput: {
+    height: 40,
+    borderColor: 'teal',
+    borderBottomWidth: 2,
+    fontSize: 20,
+    width: '100%',
+    height: 50,
+    marginBottom: 30,
+    marginLeft: 20,
+    marginRight: 20,
+  },
+});
+
+export default TodoApp;
